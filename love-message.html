@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อความพิเศษสำหรับเธอ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            color: #5a3d3d;
+            z-index: 10;
+            padding: 40px;
+            max-width: 700px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .page {
+            display: none;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 600;
+            color: #d4516f;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .message {
+            font-size: 1.6em;
+            line-height: 2;
+            margin-bottom: 40px;
+            font-weight: 300;
+            color: #7a5555;
+        }
+
+        .heart {
+            font-size: 4em;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+            margin: 20px 0;
+            filter: drop-shadow(0 4px 8px rgba(255, 105, 180, 0.3));
+        }
+
+        button {
+            background: linear-gradient(135deg, #ffd3a5 0%, #fd6585 100%);
+            border: none;
+            color: white;
+            padding: 18px 45px;
+            font-size: 1.2em;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 400;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(253, 101, 133, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(253, 101, 133, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.7;
+            animation: float 10s infinite;
+            filter: drop-shadow(0 2px 4px rgba(255, 105, 180, 0.3));
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 2s infinite;
+            box-shadow: 0 0 6px white;
+        }
+
+        .page-indicator {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #d4516f;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .decorative-elements {
+            position: absolute;
+            font-size: 3em;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .cloud {
+            position: fixed;
+            font-size: 4em;
+            opacity: 0.15;
+            animation: float-slow 20s infinite ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.15); }
+            20%, 40% { transform: scale(1.25); }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(30px, -30px);
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .final-heart {
+            font-size: 6em;
+            margin: 20px 0;
+            animation: heartbeat 1.5s ease-in-out infinite, fadeInScale 1s ease-out;
+            filter: drop-shadow(0 6px 12px rgba(255, 105, 180, 0.5));
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 30px;
+            }
+            h1 { font-size: 1.7em; }
+            .message { font-size: 1.3em; }
+            .heart { font-size: 3em; }
+            .final-heart { font-size: 4.5em; }
+            .page-indicator {
+                top: 15px;
+                right: 15px;
+                font-size: 0.9em;
+                padding: 6px 12px;
+            }
+            button {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- เมฆตกแต่ง -->
+    <div class="cloud" style="top: 10%; left: 10%;">☁️</div>
+    <div class="cloud" style="top: 20%; right: 15%; animation-delay: 5s;">☁️</div>
+    <div class="cloud" style="bottom: 15%; left: 20%; animation-delay: 10s;">☁️</div>
+
+    <div class="hearts-bg" id="heartsBg"></div>
+    
+    <div class="page-indicator" id="pageIndicator">1/8</div>
+    
+    <div class="container">
+        <!-- หน้า 1 -->
+        <div class="page active" id="page1">
+            <div class="heart">💌</div>
+            <h1>เรามีบางอย่าง<br>ที่อยากให้เธออ่านจนจบ</h1>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 2 -->
+        <div class="page" id="page2">
+            <div class="heart">🌸</div>
+            <div class="message">
+                เราไม่ใช่คนที่เก่งเรื่องความรู้สึก<br>
+                และไม่ค่อยพูดอะไรสวยๆ
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 3 -->
+        <div class="page" id="page3">
+            <div class="heart">💭</div>
+            <div class="message">
+                แต่มีความจริงอยู่อย่างหนึ่ง<br>
+                ที่เราโกหกไม่ได้
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 4 -->
+        <div class="page" id="page4">
+            <div class="heart">🌙</div>
+            <div class="message">
+                ทุกครั้งที่เงียบ หรือทุกครั้งที่คิดถึง<br>
+                คนที่นึกถึง คือเธอ
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 5 -->
+        <div class="page" id="page5">
+            <div class="heart">✨</div>
+            <div class="message">
+                เราไม่รู้ว่าอนาคตจะยาวแค่ไหน<br>
+                แค่รู้ว่า "ตอนนี้" เราเลือกเธอ
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 6 -->
+        <div class="page" id="page6">
+            <div class="heart">🌻</div>
+            <div class="message">
+                ถ้าวันไหนเธอเหนื่อย<br>
+                หรือรู้สึกไม่เหลือใคร<br>
+                อย่างน้อย…ยังมีเรา
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 7 -->
+        <div class="page" id="page7">
+            <div class="heart">🌈</div>
+            <div class="message">
+                เราไม่ได้อยากครอบครอง<br>
+                แค่อยากอยู่ข้างๆ ในแบบของเรา
+            </div>
+            <button onclick="nextPage()"><span style="position: relative; z-index: 1;">อ่านต่อ</span></button>
+        </div>
+
+        <!-- หน้า 8 (จบ) -->
+        <div class="page" id="page8">
+            <div class="final-heart">🤍</div>
+            <h1>เรารักเธอ จริงๆ</h1>
+            <div id="question" style="margin-top: 30px;">
+                <p style="font-size: 1.4em; margin-bottom: 25px; color: #d4516f; font-weight: 400;">เธอรู้สึกเหมือนกันไหม?</p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="showResponse(true)" style="min-width: 150px;">
+                        <span style="position: relative; z-index: 1;">รักเหมือนกัน 💕</span>
+                    </button>
+                    <button onclick="showResponse(false)" style="background: linear-gradient(135deg, #d4d4d4 0%, #a8a8a8 100%); min-width: 150px;">
+                        <span style="position: relative; z-index: 1;">ขอเวลาคิด 🤔</span>
+                    </button>
+                </div>
+            </div>
+            <div id="response" style="display: none; margin-top: 30px; animation: fadeInScale 0.8s ease-out;">
+                <div class="final-heart" style="font-size: 7em;">💖</div>
+                <h1 style="font-size: 2.5em; color: #d4516f;">ขอบคุณที่เลือกเรา 🌸</h1>
+                <p style="font-size: 1.3em; margin-top: 15px; color: #7a5555;">เราจะดูแลเธอให้ดีที่สุด</p>
+            </div>
+            <div id="response2" style="display: none; margin-top: 30px; animation: fadeInScale 0.8s ease-out;">
+                <div class="final-heart" style="font-size: 5em;">🌙</div>
+                <h1 style="font-size: 2em; color: #d4516f;">ไม่เป็นไร 💭</h1>
+                <p style="font-size: 1.3em; margin-top: 15px; color: #7a5555;">เราจะรอเธอ...เท่าที่จะรอได้</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 8;
+
+        // สร้างหัวใจลอย
+        function createFloatingHeart() {
+            const hearts = ['💕', '💖', '💗', '💓', '💝', '🌸', '🌺', '🦋'];
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+            document.getElementById('heartsBg').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 15000);
+        }
+
+        // สร้างประกายดาว
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('heartsBg').appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+
+        // สร้างหัวใจและประกายดาวเป็นระยะ
+        setInterval(createFloatingHeart, 1500);
+        setInterval(createSparkle, 800);
+        
+        // สร้างหัวใจเริ่มต้น
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createFloatingHeart, i * 300);
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                document.getElementById('page' + currentPage).classList.remove('active');
+                currentPage++;
+                document.getElementById('page' + currentPage).classList.add('active');
+                document.getElementById('pageIndicator').textContent = currentPage + '/' + totalPages;
+                
+                // สร้างหัวใจพิเศษเมื่อเปลี่ยนหน้า
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(createFloatingHeart, i * 80);
+                    setTimeout(createSparkle, i * 60);
+                }
+
+                // สร้างหัวใจและประกายเยอะๆ ในหน้าสุดท้าย
+                if (currentPage === totalPages) {
+                    for (let i = 0; i < 40; i++) {
+                        setTimeout(createFloatingHeart, i * 100);
+                    }
+                    for (let i = 0; i < 30; i++) {
+                        setTimeout(createSparkle, i * 50);
+                    }
+                }
+            }
+        }
+
+        function showResponse(love) {
+            document.getElementById('question').style.display = 'none';
+            if (love) {
+                document.getElementById('response').style.display = 'block';
+                // สร้างหัวใจและประกายเยอะมากๆ
+                for (let i = 0; i < 60; i++) {
+                    setTimeout(createFloatingHeart, i * 80);
+                }
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(createSparkle, i * 40);
+                }
+            } else {
+                document.getElementById('response2').style.display = 'block';
+                // สร้างหัวใจน้อยลง
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(createFloatingHeart, i * 150);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
